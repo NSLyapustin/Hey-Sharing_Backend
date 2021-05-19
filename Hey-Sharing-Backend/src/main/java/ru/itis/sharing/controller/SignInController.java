@@ -46,7 +46,7 @@ public class SignInController {
             response.put("err", "User is banned");
             return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
-        response.put("token", tokenDto);
+        response.put("token", token);
         return ResponseEntity.ok(response);
     }
 }

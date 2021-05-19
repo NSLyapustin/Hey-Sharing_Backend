@@ -1,14 +1,17 @@
 package ru.itis.sharing.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = 'product')
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue
@@ -34,6 +37,7 @@ public class Product {
     private String description;
 
     @Column
+    @Enumerated(value = EnumType.STRING)
     private Category category;
 
     @Column
@@ -43,10 +47,18 @@ public class Product {
     @Column
     private String address;
 
-    @Column
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private ApplicationUser userId;
+
+    @ManyToMany
+    @JoinTable(name = "favorites",
+            joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
+    private List<ApplicationUser> likedUsersList;
+
+    @OneToMany(mappedBy = "product")
+    private List<Rent> rents;
 
     public enum Status {
         AWAITING_CONFIRMATION,
@@ -61,7 +73,26 @@ public class Product {
         ELECTRONICS,
         FURNITURE,
         HOBBIES_AND_LEISURE,
-        CLOTHES
+        CLOTHES;
+
+        public String toString() {
+            switch (this) {
+                case VEHICLE:
+                    return "VEHICLE";
+                case APPLIANCES:
+                    return "APPLIANCES";
+                case ELECTRONICS:
+                    return "ELECTRONICS";
+                case FURNITURE:
+                    return "FURNITURE";
+                case HOBBIES_AND_LEISURE:
+                    return "HOBBIES_AND_LEISURE";
+                case CLOTHES:
+                    return "CLOTHES";
+                default:
+                    return "ALL";
+            }
+        }
     }
 
     public enum Period {

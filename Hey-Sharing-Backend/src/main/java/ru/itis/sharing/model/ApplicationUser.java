@@ -1,16 +1,14 @@
 package ru.itis.sharing.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "account")
@@ -41,4 +39,7 @@ public class ApplicationUser {
 
     @OneToMany(mappedBy = "userId")
     private List<Product> products;
+
+    @ManyToMany(mappedBy = "likedUsersList")
+    private List<Product> favoriteProducts;
 }

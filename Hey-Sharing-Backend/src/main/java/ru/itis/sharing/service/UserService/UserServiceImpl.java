@@ -30,14 +30,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApplicationUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser user = userRepository.findApplicationUserByUsername(username)
+        ApplicationUser user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
         return user;
     }
 
     @Override
     public UserAuthDto login(UserAuthDto userDto) {
-        ApplicationUser applicationUser = userRepository.findApplicationUserByUsername(userDto.getUsername())
+        ApplicationUser applicationUser = userRepository.findByUsername(userDto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
         if (passwordEncoder.matches(userDto.getPassword(), applicationUser.getPassword())) {

@@ -66,6 +66,6 @@ public class JwtTokenProvider {
                 .get("username")
                 .toString();
         val user = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(user,"", user.getAuthorities());
     }
 }

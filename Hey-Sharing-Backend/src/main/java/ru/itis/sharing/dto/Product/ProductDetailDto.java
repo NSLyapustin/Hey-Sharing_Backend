@@ -7,6 +7,7 @@ import ru.itis.sharing.model.Product;
 @Builder
 @Data
 public class ProductDetailDto {
+    Long id;
     String name;
     String image;
     Integer price;
@@ -19,6 +20,7 @@ public class ProductDetailDto {
 
     public static ProductDetailDto from(Product product) {
         return ProductDetailDto.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .image(product.getImage())
                 .price(product.getPrice())

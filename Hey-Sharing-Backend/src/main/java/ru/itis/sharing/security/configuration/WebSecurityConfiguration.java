@@ -45,6 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signUp").permitAll()
                 .antMatchers("/signIn").permitAll()
                 .antMatchers("/admin/**").hasAuthority(ApplicationUser.Role.ADMIN.toString())
+//                .antMatchers("/rent/**").hasAuthority(ApplicationUser.Role.MODER.toString())
                 .anyRequest().authenticated()
                 .and()
                 .logout()

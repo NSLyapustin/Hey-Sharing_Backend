@@ -30,6 +30,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     implementation 'org.postgresql:postgresql'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 }
 
 test {

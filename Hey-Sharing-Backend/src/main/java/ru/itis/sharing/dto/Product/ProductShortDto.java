@@ -9,6 +9,7 @@ import ru.itis.sharing.model.Product;
 @Builder
 @Data
 public class ProductShortDto {
+    Long id;
     String image;
     String name;
     Integer price;
@@ -17,6 +18,7 @@ public class ProductShortDto {
 
     public static ProductShortDto from(Product product) {
         return ProductShortDto.builder()
+                .id(product.getId())
                 .image(product.getImage())
                 .name(product.getName())
                 .price(product.getPrice())
