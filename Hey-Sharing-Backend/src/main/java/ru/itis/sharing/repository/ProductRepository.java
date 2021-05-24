@@ -15,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM product WHERE category = ?1 LIMIT 30")
     List<Product> findProductsByCategory(String category);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM product WHERE name LIKE '%?1%'")
+    List<Product> findProductsByName(String name);
 }

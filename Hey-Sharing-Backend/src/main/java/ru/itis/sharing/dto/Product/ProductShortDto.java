@@ -13,6 +13,7 @@ public class ProductShortDto {
     String image;
     String name;
     Integer price;
+    String status;
     Product.Period period;
     Product.Category category;
 
@@ -21,6 +22,7 @@ public class ProductShortDto {
                 .id(product.getId())
                 .image(product.getImage())
                 .name(product.getName())
+                .status(product.getStatus().toString())
                 .price(product.getPrice())
                 .period(product.getPeriod())
                 .category(product.getCategory())

@@ -31,18 +31,18 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Integer getUserIncome(String username) {
-//        ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
-//        var products = user.getProducts();
-//        Integer income = 0;
-//        for (Product product: products) {
-//            for (Rent rent: product.getRents()) {
-//                if (rent.getToDate().compareTo((new Date())) == 1) {
-//                    income = income + product.getPrice() * rent.getCountOfPeriod();
-//                };
-//            }
-//        }
-//        return income;
-        return 12345;
+        ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        var products = user.getProducts();
+        Integer income = 0;
+        for (Product product: products) {
+            for (Rent rent: product.getRents()) {
+                if (rent.getToDate().compareTo((new Date())) == 1) {
+                    income = income + product.getPrice() * rent.getCountOfPeriod();
+                };
+            }
+        }
+        return income;
+//        return 12345;
     }
 
     @Override
@@ -58,8 +58,10 @@ public class ProfileServiceImpl implements ProfileService {
     private void checkProductStatus(Product product) {
         Date lastDate = product.getRents().stream().map(rent -> rent.getToDate()).max(Date::compareTo).orElse(new Date());
         if (lastDate.compareTo(new Date()) < 1) {
-            product.setStatus(Product.Status.AT_THE_RECEPTION_POINT);
-            productRepository.save(product);
+            if (product.getStatus().equals(Product.Status.AT_THE_TENANT)) {
+                product.setStatus(Product.Status.AT_THE_RECEPTION_POINT);
+                productRepository.save(product);
+            }
         }
     }
 }

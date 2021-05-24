@@ -16,7 +16,9 @@ import ru.itis.sharing.security.UserDetails.ApplicationUserDetails;
 import ru.itis.sharing.security.jwt.JwtTokenProvider;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
@@ -37,9 +39,6 @@ public class ProductServiceImpl implements ProductService {
 
     private Random random = new Random();
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
     @Override
     public List<ProductShortDto> getProductsForMainPage() {
         var products = productRepository.findProductsForMainPage();
@@ -50,11 +49,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductShortDto> getProductsFromMainPageByCategory(Product.Category category) {
+    public List<ProductShortDto> getProductsForMainPageByCategory(Product.Category category) {
         var products = productRepository.findProductsByCategory(category.toString());
-//        for (Product product: products) {
-//            checkProductStatus(product);
-//        }
+        for (Product product: products) {
+            checkProductStatus(product);
+        }
+        return products.stream().map(ProductShortDto::from).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductShortDto> getProductsByName(String name) {
+        var products = productRepository.findProductsByName(name);
+        for (Product product: products) {
+            checkProductStatus(product);
+        }
         return products.stream().map(ProductShortDto::from).collect(Collectors.toList());
     }
 
@@ -92,12 +100,22 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);
         }
     }
-//    @Override
-//    public String saveImage(MultipartFile image) throws IOException {
-//        String folder = "/photos/";
-//        String imageName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
-//        File imageFile = new File()
-//        byte[] bytes = image.getBytes();
-//        Paths.get(folder + image.getOriginalFilename());
-//    }
+
+    @Override
+    public String saveImage(MultipartFile image) throws IOException {
+        String name = UUID.randomUUID().toString() + image.getOriginalFilename();
+        File convertFile = new File("src/main/resources/photos/" + name);
+        Files.createFile(convertFile.toPath());
+        FileOutputStream fileOutputStream = new FileOutputStream(convertFile);
+        fileOutputStream.write(image.getBytes());
+        fileOutputStream.close();
+        return name;
+    }
+
+    @Override
+    public void confirmProduct(Long productId) throws NotFoundException {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("product not found"));
+        product.setStatus(Product.Status.AT_THE_RECEPTION_POINT);
+        productRepository.save(product);
+    }
 }
